@@ -1,73 +1,90 @@
-# Relatório – Qualidade de Repositórios (gerado em 2025-09-19 10:53)
+# Relatório – Qualidade de Repositórios
 
-## (i) Introdução e hipóteses informais
+## Introdução e hipóteses informais
 
-- **RQ01 (Popularidade ↔ Qualidade):** hipótese: repositórios com mais estrelas tendem a ter *ligeiramente* menor acoplamento (CBO), menor LCOM e DIT moderado.
+- **RQ01 (Popularidade ⇔ Qualidade):** hipótese: repositórios mais populares (mais estrelas) tendem a apresentar maior qualidade (menor acoplamento, maior coesão).  
+- **RQ02 (Maturidade ⇔ Qualidade):** hipótese: repositórios mais antigos são mais estáveis, com métricas de qualidade mais controladas.  
+- **RQ03 (Atividade ⇔ Qualidade):** hipótese: projetos mais ativos (mais releases) mantêm qualidade melhor.  
+- **RQ04 (Tamanho ⇔ Qualidade):** hipótese: LOC maiores tendem a elevar o acoplamento (CBO) e a complexidade (DIT, LCOM).  
 
-- **RQ02 (Maturidade ↔ Qualidade):** hipótese: repositórios mais antigos exibem métricas de qualidade mais estáveis (CBO/LCOM menores em média).
+---
 
-- **RQ03 (Atividade ↔ Qualidade):** hipótese: mais releases está associado a práticas de release melhores e possivelmente menor LCOM.
+## Metodologia
 
-- **RQ04 (Tamanho ↔ Qualidade):** hipótese: LOC maior tende a correlacionar com CBO/LCOM maiores (complexidade/acoplamento aumentam com tamanho).
+1. Métricas de **processo** por repositório: estrelas (popularidade), idade em anos (maturidade), número de releases (atividade), LOC e comentários (tamanho).  
+2. Métricas de **qualidade**: CBO (acoplamento), DIT (profundidade de herança), LCOM (coesão).  
+3. Consolidação em `unified_metrics.csv`.  
+4. Visualização por boxplots, ECDFs, scatterplots e hexbin.  
 
+---
 
-## (ii) Metodologia
+## Resultados e discussão
 
-1. Métricas de **processo** por repositório: Popularidade (`stars`), Maturidade (`idade_anos`), Atividade (`releases`), Tamanho (`loc`, `locComment`).
+### RQ01 – Popularidade e Qualidade
 
-2. Métricas de **qualidade** (CK, por classe, agregadas por repo): `cbo` (Coupling), `dit` (Depth of Inheritance Tree), `lcom` (Lack of Cohesion of Methods).
+- Poucos projetos muito populares, maioria com poucas estrelas.  
+- A relação entre estrelas e métricas de qualidade é **fraca**, mas os outliers de popularidade não significam maior qualidade.  
 
-3. O `unified_metrics.csv` contém uma linha por repositório com médias de CK (agregadas por classe) e as métricas de processo via GitHub.
+**Gráficos**:  
+![ECDF Stars](out/figs/ecdf_stars.png)  
+![CBO vs Stars](out/figs/scatter_cbo_vs_stars.png)  
+![DIT vs Stars](out/figs/scatter_dit_vs_stars.png)  
+![LCOM vs Stars](out/figs/scatter_lcom_vs_stars.png)  
 
-4. Resumos por medida central (média, mediana, desvio-padrão) foram calculados **entre repositórios** para cada métrica. Correlações **Spearman** entre processo×qualidade.
+---
 
+### RQ02 – Maturidade e Qualidade
 
-## (iii) Resultados
+- Distribuição de idades sugere muitos projetos entre 5–15 anos.  
+- Tendência suave: repositórios mais antigos **não apresentam melhora clara** nas métricas (CBO, DIT, LCOM).  
 
-### Estatísticas descritivas (entre repositórios)
+**Gráficos**:  
+![ECDF Idade](out/figs/ecdf_idade_anos.png)  
+![CBO vs Idade](out/figs/scatter_cbo_vs_idade_anos.png)  
+![DIT vs Idade](out/figs/scatter_dit_vs_idade_anos.png)  
+![LCOM vs Idade](out/figs/scatter_lcom_vs_idade_anos.png)  
 
-| metric     |     mean |   median |       std |
-|:-----------|---------:|---------:|----------:|
-| stars      | 9374.97  | 5661.5   | 11504.7   |
-| releases   |   13.493 |   10     |    13.013 |
-| idade_anos |    9.649 |    9.75  |     3.034 |
-| loc        |   50.708 |   43.759 |    32.884 |
-| locComment |    0     |    0     |     0     |
-| cbo        |    5.286 |    5.241 |     1.86  |
-| dit        |    1.461 |    1.397 |     0.358 |
-| lcom       |  121.039 |   23.292 |  1809.69  |
+---
 
+### RQ03 – Atividade e Qualidade
 
-### Correlações de Spearman – processo × qualidade
+- Muitos projetos têm poucas releases; poucos são muito ativos.  
+- Qualidade parece **independente da atividade**, mas há indícios de CBO e DIT levemente maiores em projetos com mais releases.  
 
-| process_metric   | quality_metric   |   spearman |
-|:-----------------|:-----------------|-----------:|
-| stars            | cbo              |      0.018 |
-| stars            | dit              |     -0.026 |
-| stars            | lcom             |      0.043 |
-| releases         | cbo              |      0.392 |
-| releases         | dit              |      0.236 |
-| releases         | lcom             |      0.321 |
-| idade_anos       | cbo              |      0.005 |
-| idade_anos       | dit              |      0.278 |
-| idade_anos       | lcom             |      0.193 |
-| loc              | cbo              |      0.428 |
-| loc              | dit              |      0.385 |
-| loc              | lcom             |      0.737 |
-| locComment       | cbo              |    nan     |
-| locComment       | dit              |    nan     |
-| locComment       | lcom             |    nan     |
+**Gráficos**:  
+![ECDF Releases](out/figs/ecdf_releases.png)  
+![CBO vs Releases](out/figs/scatter_cbo_vs_releases.png)  
+![DIT vs Releases](out/figs/scatter_dit_vs_releases.png)  
+![LCOM vs Releases](out/figs/scatter_lcom_vs_releases.png)  
 
+---
 
-## (iv) Discussão
+### RQ04 – Tamanho e Qualidade
 
-- **Popularidade (estrelas):** se as correlações com `cbo`/`lcom` forem **negativas** (mesmo fracas), isso apoia a ideia de que projetos populares tendem a modularizar/acoplar melhor. Se forem **próximas de zero**, popularidade não explica qualidade diretamente (pode haver variáveis de confusão, p.ex. domínio, equipe, tempo).
+- Projetos pequenos predominam (poucos LOC).  
+- Repositórios maiores tendem a apresentar **maior acoplamento (CBO)** e **maior profundidade de herança (DIT)**.  
+- LCOM mostra muitos outliers, sugerindo baixa coesão em projetos grandes.  
 
-- **Maturidade (idade_anos):** correlação **negativa** com `lcom` e **baixa** com `dit`/`cbo` indicariam que o envelhecimento traz coesão. Correlação nula sugere que só idade não basta; práticas de engenharia importam mais.
+**Gráficos**:  
+![ECDF LOC](out/figs/ecdf_loc.png)  
+![ECDF LOC Comment](out/figs/ecdf_locComment.png)  
+![CBO vs LOC](out/figs/scatter_cbo_vs_loc.png)  
+![DIT vs LOC](out/figs/scatter_dit_vs_loc.png)  
+![LCOM vs LOC](out/figs/scatter_lcom_vs_loc.png)  
 
-- **Atividade (releases):** se `releases` correlacionar **negativamente** com `lcom`, pode ser efeito de entregas frequentes forçando refino/coesão. Se for **positiva** com `cbo`, pode sinalizar evolução com mais dependências.
+---
 
-- **Tamanho (loc/locComment):** espera-se correlação **positiva** com `cbo` e `lcom` (quanto maior o sistema, maior risco de acoplamento e baixa coesão). Comentários (`locComment`) muito altos podem indicar áreas densas/complexas ou apenas política de documentação.
+## Conclusão
 
+- **RQ01:** Popularidade não garante qualidade.  
+- **RQ02:** Maturidade (idade) não mostra tendência clara de melhor qualidade.  
+- **RQ03:** Atividade (releases) também não apresenta correlação forte.  
+- **RQ04:** Tamanho é a dimensão mais associada ao aumento de CBO e DIT, sugerindo impacto negativo na manutenibilidade.  
 
-> **Nota:** correlações fracas não implicam causalidade; servem como indício. Recomenda-se inspeção por amostras e segmentação (domínio, linguagem, org).
+---
+
+## Integrantes
+
+- Augusto Noronha Leite  
+- Pedro Maximo  
+- David Leong Ho  
