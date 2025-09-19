@@ -2,8 +2,9 @@ import os
 import subprocess
 import shutil
 import sys
+import stat
 
-GITHUB_TOKEN = "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+GITHUB_TOKEN = "xxxxxxxxxxxxx"
 
 def read_progress(progress_file):
     if os.path.exists(progress_file):
@@ -17,6 +18,11 @@ def read_progress(progress_file):
 def write_progress(progress_file, index):
     with open(progress_file, "w") as f:
         f.write(str(index))
+
+def handle_remove_readonly(func, path, exc):
+    """Força a exclusão de arquivos somente leitura no Windows"""
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
 
 def analyze_repos(repo_list_file, ck_jar, out_dir, clone_dir="clones", progress_file="progress.txt"):
     if not os.path.exists(ck_jar):
@@ -45,7 +51,8 @@ def analyze_repos(repo_list_file, ck_jar, out_dir, clone_dir="clones", progress_
         repo_dir = os.path.join(clone_dir, repo_name)
 
         if os.path.exists(repo_dir):
-            shutil.rmtree(repo_dir)
+            shutil.rmtree(repo_dir, onerror=handle_remove_readonly)
+
         clone_url = f"https://{GITHUB_TOKEN}@github.com/{repo}.git"
         cmd_clone = ["git", "clone", "--depth", "1", clone_url, repo_dir]
         result = subprocess.run(cmd_clone, capture_output=True, text=True)
@@ -63,5 +70,16 @@ def analyze_repos(repo_list_file, ck_jar, out_dir, clone_dir="clones", progress_
                 shutil.move(csv, new_name)
                 print(f"{csv} salvo como {new_name}")
 
-        shutil.rmtree(repo_dir)
+        # força remoção no Windows (sem PermissionError)
+        shutil.rmtree(repo_dir, onerror=handle_remove_readonly)
         print(f"Repositório {repo} deletado")
+
+        # salva progresso
+        write_progress(progress_file, i + 1)
+
+if __name__ == "__main__":
+    analyze_repos(
+        repo_list_file="java_repos_list.txt",
+        ck_jar=r"D:\ck\target\ck-0.7.1-SNAPSHOT-jar-with-dependencies.jar",
+        out_dir="ck_results"
+    )
