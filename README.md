@@ -23,6 +23,22 @@ Avaliar como características do processo de desenvolvimento se associam às pro
 
 3. **Visualizações:** 8 gráficos não repetidos (gráfico de violino, mapa de calor, gráfico de caixa, gráfico de pontos, gráfico de barras, linha, mapa de densidade, barras) com interpretações e conclusões.
 
+## Hipóteses 
+
+- **H1 (Tamanho→Acoplamento)** – Repositórios maiores tendem a apresentar maior dependência entre partes (CBO – grau de dependência entre partes).  
+
+- **H2 (Tamanho→Herança)** – Repositórios maiores tendem a apresentar herança mais profunda (DIT – nível de herança).  
+
+- **H3 (Popularidade→Melhor Qualidade)** – Mais estrelas implicam melhor qualidade.  
+
+- **H4 (Maturidade→Melhor Qualidade)** – Projetos mais antigos mantêm qualidade melhor.  
+
+- **H5 (Atividade→Melhor Qualidade)** – Mais releases conduzem a melhor qualidade.  
+
+- **H6 (Documentação inline→Qualidade)** – Mais comentários deveriam melhorar a qualidade.  
+
+- **H7 (Popularidade×Tamanho→Qualidade)** – Projetos igualmente grandes mas populares deveriam ter melhor dependência entre partes.  
+
 #### Gráfico 1 – **CBO por Tamanho (Faixas de LOC) – Violino**
 
 **RQ respondida:** RQ1 (Tamanho→CBO)
@@ -121,7 +137,7 @@ Avaliar como características do processo de desenvolvimento se associam às pro
 
 ![](figs/line_media_cbo_por_idade.png)
 
-## Hipóteses e avaliação pelos dados
+## Resposta das Hipoteses
 
 - **H1 (Tamanho→Acoplamento)** – Repositórios maiores tendem a apresentar maior dependência entre partes (CBO – grau de dependência entre partes).  
   **Evidência:** Os gráficos de gráfico de pontos e gráfico de violino mostram que sistemas com mais LOC apresentam CBO mais alto, confirmando a hipótese.
@@ -155,4 +171,5 @@ Avaliar como características do processo de desenvolvimento se associam às pro
 
 - Tabelas de relação detalhadas: [`correlacoes_processo_qualidade.csv`]
 - Figuras salvas em `figs/`.
+
 
