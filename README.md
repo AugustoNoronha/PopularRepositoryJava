@@ -121,7 +121,7 @@ Avaliar como características do processo de desenvolvimento se associam às pro
 
 ![](figs/line_media_cbo_por_idade.png)
 
-## Hipóteses (originais e novas) e avaliação pelos dados
+## Hipóteses e avaliação pelos dados
 
 - **H1 (Tamanho→Acoplamento)** – Repositórios maiores tendem a apresentar maior dependência entre partes (CBO – grau de dependência entre partes).  
   **Evidência:** Os gráficos de gráfico de pontos e gráfico de violino mostram que sistemas com mais LOC apresentam CBO mais alto, confirmando a hipótese.
@@ -155,3 +155,4 @@ Avaliar como características do processo de desenvolvimento se associam às pro
 
 - Tabelas de relação detalhadas: [`correlacoes_processo_qualidade.csv`]
 - Figuras salvas em `figs/`.
+
